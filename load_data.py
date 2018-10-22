@@ -73,7 +73,7 @@ def get_CIFAR10_data(num_training=49000, num_validation=1000, num_test=1000,
 
     # Package data into a dictionary
     return {
-        'X_train': X_train, 'y_train': y_train,
+        'X_data': X_data, 'y_data': y_data,
         'X_val': X_val, 'y_val': y_val,
         'X_test': X_test, 'y_test': y_test,
     }
