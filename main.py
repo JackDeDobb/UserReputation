@@ -2,7 +2,19 @@ import random
 import numpy as np
 import math
 from scipy.spatial import distance
-from load_data import get_CIFAR10_data
+from loadData import getDictionaries
+#from load_data import get_CIFAR10_data
+
+
+# userToReps is a dictionary of users to their reputations
+# postsMatrix is 2d array indexed by number for each post
+userToReps, postsMatrix = getDictionaries()
+
+print(userToReps)
+
+
+
+
 
 
 # You can change these numbers for experimentation
