@@ -1,12 +1,7 @@
-import requests
-import json
+import textblob
+from textblob import TextBlob
 
 
 def textBlockToSentiment(textBlock):
-    data = {
-    'text': textBlock
-    }
-    response = requests.post('http://text-processing.com/api/sentiment/', data=data)
-    print(response)
-    newJson = json.loads(response.text)
-    return float(newJson['probability']['pos'])
+    sentiment = TextBlob(textBlock)
+    return float(sentiment.sentiment.polarity), float(sentiment.sentiment.subjectivity)
