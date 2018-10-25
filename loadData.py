@@ -1,10 +1,11 @@
 import os
 import json
 from sentimentCalculator import textBlockToSentiment
+import pandas as pd
 
 labelsTrainFile = "Task2_user_reputation_prediction/Reputation_prediction_labels_train.txt"
 dataTrainFile = "Task2_user_reputation_prediction/Reputation_prediction_data_train.txt"
-cachingFile = 'cachedMatrix.txt'
+cachingFile = 'cachedMatrix.csv'
 contentTypes = {'Q': 1, 'A': 2, 'C': 3, 'E': 4, 'F': 5}
 
 
@@ -16,12 +17,13 @@ def getDictionaries():
             userId, reputation = line.split('\t')
             userToReps[userId] = int(reputation)
             line = labelsTrain.readline()
-    
+
 
     try:
         with open(cachingFile, 'r') as dataTrain:
             return userToReps, json.load(dataTrain)
     except:
+        print("here")
         postsMatrix = []
         try:
             with open(dataTrainFile, "r") as dataTrain:
@@ -31,16 +33,14 @@ def getDictionaries():
 
                     polarity, subjectivity = textBlockToSentiment(textualDescription)
 
-                    postsMatrix.append({'textualDescription': textualDescription, 'polarity': polarity, \
-                    'subjectivity': subjectivity, 'contentType': contentTypes[contentType], \
-                    'timeStamp': float(timeStamp), 'reputation': userToReps[userId]})
+                    postsMatrix.append([ polarity, subjectivity, contentTypes[contentType], userToReps[userId] ])
 
                     line = dataTrain.readline()
 
-            
-            with open(cachingFile, 'w') as fout:
-                json.dump(postsMatrix, fout)
-        
+
+            df = pd.DataFrame(postsMatrix)
+            df.to_csv('cachedMatrix.csv')
+
         except:
             try:
                 os.remove(cachingFile)
