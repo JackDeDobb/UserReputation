@@ -23,12 +23,12 @@ def getDictionaries():
         with open(cachingFile, 'r') as dataTrain:
             return userToReps, pd.read_csv(dataTrain)
     except:
-        print("here")
+        # print("here")
         postsMatrix = []
         try:
             with open(dataTrainFile, "r") as dataTrain:
                 line = dataTrain.readline()
-                print("now here")
+                # print("now here")
                 while (line):
                     textualDescription, userId, contentType, timeStamp = line.split('\t')
 
