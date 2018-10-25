@@ -21,29 +21,31 @@ def getDictionaries():
 
     try:
         with open(cachingFile, 'r') as dataTrain:
-            return userToReps, json.load(dataTrain)
+            return userToReps, pd.read_csv(dataTrain)
     except:
         print("here")
         postsMatrix = []
         try:
             with open(dataTrainFile, "r") as dataTrain:
                 line = dataTrain.readline()
+                print("now here")
                 while (line):
                     textualDescription, userId, contentType, timeStamp = line.split('\t')
 
                     polarity, subjectivity = textBlockToSentiment(textualDescription)
 
-                    postsMatrix.append([ polarity, subjectivity, contentTypes[contentType], userToReps[userId] ])
+                    postsMatrix.append([polarity, subjectivity, contentTypes[contentType], userToReps[userId] ])
 
                     line = dataTrain.readline()
 
 
             df = pd.DataFrame(postsMatrix)
-            df.to_csv('cachedMatrix.csv')
+            print()
+            df.to_csv(cachingFile, header=True, index=False)
 
         except:
             try:
-                os.remove(cachingFile)
+                pass
             except:
                 pass
 
@@ -54,4 +56,4 @@ def getDictionaries():
 
 
 
-first, second = getDictionaries()
+# first, second = getDictionaries()
