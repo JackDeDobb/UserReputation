@@ -1,6 +1,7 @@
 import os
 import json
 from sentimentCalculator import textBlockToSentiment
+from readabilityCalculator import textBlockToReadability
 import pandas as pd
 
 labelsTrainFile = "Task2_user_reputation_prediction/Reputation_prediction_labels_train.txt"
@@ -23,7 +24,6 @@ def getDictionaries():
         with open(cachingFile, 'r') as dataTrain:
             return userToReps, pd.read_csv(dataTrain)
     except:
-        # print("here")
         postsMatrix = []
         try:
             with open(dataTrainFile, "r") as dataTrain:
@@ -33,8 +33,9 @@ def getDictionaries():
                     textualDescription, userId, contentType, timeStamp = line.split('\t')
 
                     polarity, subjectivity = textBlockToSentiment(textualDescription)
+                    readability, avg_length = textBlockToReadability(textualDescription)
 
-                    postsMatrix.append([polarity, subjectivity, contentTypes[contentType], userToReps[userId] ])
+                    postsMatrix.append([polarity, subjectivity, readability, avg_length, contentTypes[contentType], userToReps[userId] ])
 
                     line = dataTrain.readline()
 
@@ -56,4 +57,4 @@ def getDictionaries():
 
 
 
-# first, second = getDictionaries()
+first, second = getDictionaries()
