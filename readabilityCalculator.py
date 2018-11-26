@@ -1,3 +1,4 @@
+#install textstat (put into readme)
 import textstat
 
 
