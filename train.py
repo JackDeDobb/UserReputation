@@ -30,6 +30,7 @@ y = postsMatrix[:, num_dim - 1]
 kf = KFold(n_splits=5, shuffle = True)
 kf.get_n_splits(postsMatrix)
 
+total_verified_acc = 0
 for train_index, test_index in kf.split(X):
 
 	X_train, X_test = X[train_index], X[test_index]
@@ -47,4 +48,11 @@ for train_index, test_index in kf.split(X):
 
 	model = VotingClassifier(estimators=[('knn', knn), ('lin_dis', lin_dis), ('nb', nb), ('rf', rf)], voting='soft')
 	model.fit(X_train, y_train)
+	pred = model.predict(X_test)
+	total_verified_acc += accuracy_score(y_test, pred)
 	pickle.dump(model, open('./model.sav', 'wb'))
+average_verified_acc = total_verified_acc/5
+print("Verified accuracy of the model is " + str(average_verified_acc))
+
+
+
