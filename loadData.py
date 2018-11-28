@@ -9,7 +9,7 @@ contentTypes = {'Q': 1, 'A': 2, 'C': 3, 'E': 4, 'F': 5}
 
 
 
-def getPostsMatrix(dataTrainFile, cachingFile):
+def getPostsMatrix(dataTrainFile, userToReps, cachingFile):
     postsMatrix = []
     try:
         with open(dataTrainFile, "r") as dataTrain:
@@ -18,7 +18,10 @@ def getPostsMatrix(dataTrainFile, cachingFile):
                 textualDescription, userId, contentType, timeStamp = line.split('\t')
                 polarity, subjectivity = textBlockToSentiment(textualDescription)
                 readability, avg_length = textBlockToReadability(textualDescription)
-                postsMatrix.append([polarity, subjectivity, readability, avg_length, contentTypes[contentType], userToReps[userId] ])
+                if cachingFile:
+                    postsMatrix.append([polarity, subjectivity, readability, avg_length, contentTypes[contentType], userToReps[userId] ])
+                else:
+                    postsMatrix.append([polarity, subjectivity, readability, avg_length, contentTypes[contentType]])
                 line = dataTrain.readline()
 
         df = pd.DataFrame(postsMatrix)
@@ -45,12 +48,12 @@ def getTrainDictionaries(labelsTrainFile, dataTrainFile, cachingFile):
         with open(cachingFile, 'r') as dataTrain:
             return userToReps, pd.read_csv(dataTrain)
     except:
-        postsMatrix = getPostsMatrix(dataTrainFile, cachingFile)
+        postsMatrix = getPostsMatrix(dataTrainFile, userToReps, cachingFile)
     
     return userToReps, postsMatrix
     
     
 def getTestDictionary(dataTestFile):
-    postsMatrix = getPostsMatrix(dataTestFile, None)
+    postsMatrix = getPostsMatrix(dataTestFile, None, None)
     return postsMatrix
 
