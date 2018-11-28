@@ -12,11 +12,15 @@ To install all the necessary python libraries, run
 
 Run Code
 --------
-To test our models on new test data, run
+To **train** and see printed **accuracy** numbers, run
+```bash
+python train.py
+```
+This saves our trained model to be later used in test.py. The printed output in the terminal is a verified accuracy of our model after running kforld cross-validation on the dataset given in the assignment.
+
+
+To **test** our model on new test data, run
 ```bash
 python test.py <path_to_dataset>
 ```
-
-Output Format
--------------
-The output will be written to a file called output.txt in the same directory as the input file.
+The predictions will be written to a file called output.txt in the same directory as the input file.
