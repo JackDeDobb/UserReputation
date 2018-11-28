@@ -22,7 +22,7 @@ def useModel(test_data, directory):
     pred = model.predict(test_data)
     with open(directory + '/output.txt', 'w') as f:
         for elem in pred:
-            f.write(str(elem) + '\n')
+            f.write(str(int(elem)) + '\n')
 
 
 path, directory = getTestFile()

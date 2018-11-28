@@ -27,7 +27,7 @@ num_dim = len(postsMatrix[0])
 X = postsMatrix[:, :num_dim - 1]
 y = postsMatrix[:, num_dim - 1]
 
-kf = KFold(n_splits=5, shuffle = True)
+kf = KFold(n_splits=25, shuffle = True)
 kf.get_n_splits(postsMatrix)
 
 total_verified_acc = 0
@@ -37,21 +37,21 @@ for train_index, test_index in kf.split(X):
 	y_train, y_test = y[train_index], y[test_index]
 
 
-	knn = KNeighborsClassifier(n_neighbors=50)
+	knn = KNeighborsClassifier(n_neighbors=85)
 
 	lin_dis = LinearDiscriminantAnalysis(n_components=None, priors=None, shrinkage=None,
               solver='lsqr', store_covariance=True, tol=0.0000000001)
 
-	svc = LinearSVC(random_state=0, tol=1e-5)
+	#svc = LinearSVC(random_state=0, tol=1e-8)
 
 	nb = GaussianNB()
 
 	rf = RandomForestClassifier(n_estimators=100, max_depth = 50)
 
-	model = VotingClassifier(estimators=[('knn', knn), ('lin_dis', lin_dis), ('svc', svc), ('nb', nb), ('rf', rf)], voting='hard')
+	model = VotingClassifier(estimators=[('knn', knn), ('lin_dis', lin_dis), ('nb', nb), ('rf', rf)], voting='soft')
 	model.fit(X_train, y_train)
 	pred = model.predict(X_test)
 	total_verified_acc += accuracy_score(y_test, pred)
 	pickle.dump(model, open('./model.sav', 'wb'))
-average_verified_acc = total_verified_acc/5
+average_verified_acc = total_verified_acc/25
 print("Verified accuracy of the model is " + str(average_verified_acc))
