@@ -5,10 +5,13 @@ from scipy.spatial import distance
 from loadData import getDictionaries
 from KNN import *
 from sklearn.model_selection import KFold
-from sklearn.linear_model import LinearRegression
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.ensemble import VotingClassifier
-from sklearn.neighbors import KNeighborsRegressor
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score
+from sklearn.naive_bayes import GaussianNB
+from sklearn.ensemble import RandomForestClassifier
 
 
 # userToReps is a dictionary of users to their reputations
@@ -22,8 +25,8 @@ postsMatrix = (postsMatrix.values)
 num_values = len(postsMatrix)
 num_dim = len(postsMatrix[0])
 
-X = postsMatrix[:, :num_dim - 1]
-y = postsMatrix[:, num_dim - 1]
+X = postsMatrix[:, :num_dim - 1]#[:5000]
+y = postsMatrix[:, num_dim - 1]#[:5000]
 
 
 def get_acc(pred, y_test):
@@ -44,32 +47,70 @@ for train_index, test_index in kf.split(X):
 	# knn = KNN(k)
 	# knn.train(X_train, y_train)
 	# pred_knn = knn.predict(X_test)	#eventually write this to a file 
-	# knn = KNeighborsRegressor(n_neighbors=100)
+	# print(pred_knn)
+	knn = KNeighborsClassifier(n_neighbors=5)
 	# knn.fit(X_train, y_train)
 	# knn_pred = knn.predict(X_test)
-	# # print(knn.score(X_test, y_test))
-	# print(knn_pred)
+	# knn_acc = accuracy_score(y_test, knn_pred)
+	# print(knn_acc)
 
 
-	reg = LinearRegression()
-	reg.fit(X_train, y_train)
-	pred_reg = reg.predict(X_test)
-	print(pred_reg)
-	print(reg.score(X_test, y_test))
+	lin_dis = LinearDiscriminantAnalysis(n_components=None, priors=None, shrinkage=None,
+              solver='lsqr', store_covariance=True, tol=0.0000000001)
+	# lin_dis.fit(X_train, y_train)
+	# pred_lin_dis = lin_dis.predict(X_test)
+	# print(pred_lin_dis)
+	# lin_dis_acc = accuracy_score(y_test, pred_lin_dis)
+	# print(lin_dis_acc)
 
-	# clf = LinearDiscriminantAnalysis()
-	# clf.fit(X_train, y_train)
-	# pred_clf = clf.predict(X_test)
 
-	# model = VotingClassifier(estimators=[('knn', knn), ('linreg', reg), ('lindis', clf)], voting='hard')
+
+	svc = SVC(random_state = 0)
+	svc.fit(X_train, y_train)
+	pred_svc = svc.predict(X_test)
+	# print(pred_lin_svc)
+	svc_acc = accuracy_score(y_test, pred_svc)
+	print(svc_acc)
+
+
+	nb = GaussianNB()
+	# nb.fit(X_train, y_train)
+	# pred_nb = nb.predict(X_test)
+	# nb_acc = accuracy_score(y_test, pred_nb)
+	# print(nb_acc)
+
+
+
+	rf = RandomForestClassifier(n_estimators=100, max_depth = 50)
+	# rf.fit(X_train, y_train)
+	# pred_rf = rf.predict(X_test)
+	# rf_acc = accuracy_score(y_test, pred_rf)
+	# print(rf_acc)
+
+	# num_not_1 = 0
+	# for i in pred_rf:
+	# 	if i != 1:
+	# 		num_not_1 +=1
+	# print(num_not_1)
+
+	# model = VotingClassifier(estimators=[('knn', knn), ('lin_dis', lin_dis), ('svc', svc), ('nb', nb), ('rf', rf)], voting='soft')
+	# # model = VotingClassifier(estimators=[('knn', knn), ('lin_dis', lin_dis), ('nb', nb), ('rf', rf)], voting='soft')
+
 	# model.fit(X_train, y_train)
-	# # model.predict(X_test)
-	# # model.score(X_test, y_test)
+	# pred = model.predict(X_test)
+	# acc = accuracy_score(y_test, pred)
+	# print("accuracy_score is " + str(acc))
+	num_not_1 = 0
+	for i in pred_svc:
+		if i != 1:
+			num_not_1 +=1
+	print(num_not_1)
 
 	# acc = get_acc(pred_knn, y_test)
 	# print('The validation of %d accuracy is given by : %f' % (k, acc))
-	# avg_acc += acc
-# avg_acc = avg_acc/2
+# 	avg_acc += acc
+# avg_acc = avg_acc/5
+# print(avg_acc)
 # print('The average validation of %d accuracy is given by : %f' % (k, avg_acc))
 
 
