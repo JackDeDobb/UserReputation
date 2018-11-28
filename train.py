@@ -39,16 +39,15 @@ for train_index, test_index in kf.split(X):
 
 	knn = KNeighborsClassifier(n_neighbors=85)
 
+
 	lin_dis = LinearDiscriminantAnalysis(n_components=None, priors=None, shrinkage=None,
-              solver='lsqr', store_covariance=True, tol=0.0000000001)
+              solver='svd', store_covariance=True, tol=0.000000000001)
 
-	#svc = LinearSVC(random_state=0, tol=1e-8)
 
-	nb = GaussianNB()
+	rf = RandomForestClassifier(n_estimators=150, max_depth = 10)
 
-	rf = RandomForestClassifier(n_estimators=100, max_depth = 50)
 
-	model = VotingClassifier(estimators=[('knn', knn), ('lin_dis', lin_dis), ('nb', nb), ('rf', rf)], voting='soft')
+	model = VotingClassifier(estimators=[('knn', knn), ('lin_dis', lin_dis), ('rf', rf)], voting='soft')
 	model.fit(X_train, y_train)
 	pred = model.predict(X_test)
 	total_verified_acc += accuracy_score(y_test, pred)
