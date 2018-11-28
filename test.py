@@ -18,7 +18,6 @@ def getTestFile():
 
 def useModel(test_data, directory):
     model = pickle.load(open('model.sav', 'rb'))
-    print(test_data.shape)
     pred = model.predict(test_data)
     with open(directory + '/output.txt', 'w') as f:
         for elem in pred:
