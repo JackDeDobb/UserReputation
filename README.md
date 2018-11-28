@@ -16,7 +16,7 @@ To **train** and see printed **accuracy** numbers, run
 ```bash
 python train.py
 ```
-This saves our trained model to be later used in test.py. The printed output in the terminal is a verified accuracy of our model after running kforld cross-validation on the dataset given in the assignment.
+This saves our trained model to be later used in test.py. The printed output in the terminal is a verified accuracy of our model after running kfold cross-validation on the dataset given in the assignment.
 
 
 To **test** our model on new test data, run
